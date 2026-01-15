@@ -1,0 +1,122 @@
+name: Supabase Database Backup (PostgreSQL 17)
+
+on:
+  schedule:
+    # Runs every Tuesday and Friday at 3:00 UTC (12:00 JST)
+    - cron: '0 3 * * 2,5'
+  workflow_dispatch:
+    inputs:
+      retention_days:
+        description: 'Backup retention days (default: 30)'
+        required: false
+        default: '30'
+        type: string
+
+permissions:
+  contents: write
+  
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Remove default PostgreSQL packages
+      run: |
+        sudo apt-get remove -y postgresql-client-common postgresql-common || true
+        sudo apt-get autoremove -y
+        
+    - name: Install PostgreSQL 17 complete client suite
+      run: |
+        sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        sudo apt-get update
+        sudo apt-get install -y postgresql-client-17 postgresql-client-common postgresql-common
+        
+    - name: Set PostgreSQL 17 as default
+      run: |
+        sudo update-alternatives --install /usr/bin/pg_dump pg_dump /usr/lib/postgresql/17/bin/pg_dump 100
+        sudo update-alternatives --install /usr/bin/psql psql /usr/lib/postgresql/17/bin/psql 100
+        sudo update-alternatives --install /usr/bin/pg_restore pg_restore /usr/lib/postgresql/17/bin/pg_restore 100
+        
+    - name: Verify PostgreSQL client versions
+      run: |
+        echo "PostgreSQL Client Versions:"
+        pg_dump --version
+        psql --version
+        
+    - name: Generate backup filename
+      id: backup
+      run: |
+        TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+        FILENAME="portfolio_backup_${TIMESTAMP}.sql"
+        COMPRESSED_FILENAME="${FILENAME}.gz"
+        echo "filename=${FILENAME}" >> $GITHUB_OUTPUT
+        echo "compressed_filename=${COMPRESSED_FILENAME}" >> $GITHUB_OUTPUT
+        echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+        
+    - name: Create database backup
+      env:
+        SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      run: |
+        echo "Creating database backup..."
+        pg_dump "$SUPABASE_DB_URL" \
+          --verbose \
+          --no-password \
+          --format=plain \
+          --file="${{ steps.backup.outputs.filename }}"
+        
+        echo "Backup file size:"
+        ls -lh "${{ steps.backup.outputs.filename }}"
+        
+    - name: Compress backup file
+      run: |
+        echo "Compressing backup file..."
+        gzip "${{ steps.backup.outputs.filename }}"
+        
+        echo "Compressed file size:"
+        ls -lh "${{ steps.backup.outputs.compressed_filename }}"
+        
+    - name: Upload backup to GitHub Releases
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        RELEASE_TAG="backup-${{ steps.backup.outputs.timestamp }}"
+        RELEASE_TITLE="Database Backup (Contact Forms) - $(date '+%Y-%m-%d %H:%M UTC')"
+        
+        echo "Creating release: ${RELEASE_TAG}"
+        gh release create "${RELEASE_TAG}" \
+          --title "${RELEASE_TITLE}" \
+          --notes "Automated backup of contact form submissions database created on $(date -u)" \
+          "${{ steps.backup.outputs.compressed_filename }}"
+          
+    - name: Clean up old backups
+      env:
+        GH_TOKEN: ${{ github.token }}
+        RETENTION_DAYS: ${{ github.event.inputs.retention_days || '30' }}
+      run: |
+        echo "Cleaning up backups older than ${RETENTION_DAYS} days..."
+        
+        CUTOFF_DATE=$(date -d "${RETENTION_DAYS} days ago" +%Y%m%d)
+        echo "Cutoff date: ${CUTOFF_DATE}"
+        
+        gh release list --limit 100 | grep "backup-" | while read line; do
+          TAG=$(echo "$line" | awk '{print $1}')
+          BACKUP_DATE=$(echo "$TAG" | sed 's/backup-\([0-9]*\)_.*/\1/')
+          
+          if [[ "$BACKUP_DATE" =~ ^[0-9]{8}$ ]] && [[ "$BACKUP_DATE" < "$CUTOFF_DATE" ]]; then
+            echo "Deleting old backup: $TAG (date: $BACKUP_DATE)"
+            gh release delete "$TAG" --yes || echo "Failed to delete $TAG"
+          fi
+        done
+        
+    - name: Backup completion summary
+      run: |
+        echo "Backup Summary:"
+        echo "- Timestamp: ${{ steps.backup.outputs.timestamp }}"
+        echo "- Compressed file: ${{ steps.backup.outputs.compressed_filename }}"
+        echo "- File size: $(ls -lh "${{ steps.backup.outputs.compressed_filename }}" | awk '{print $5}')"
+        echo "- Release tag: backup-${{ steps.backup.outputs.timestamp }}"
+        echo "- Retention period: ${{ github.event.inputs.retention_days || '30' }} days"

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
+  "extends": ["../../tooling/biome/src/base.json"],
+  "files": {
+    "ignore": ["dist/**", "**/__tests__/**"]
+  }
+}

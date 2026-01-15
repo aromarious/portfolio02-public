@@ -1,0 +1,111 @@
+/* Resume PDF Style */
+body {
+  font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 20mm;
+  line-height: 1.8; /* 行間を広く */
+  color: #333;
+  font-size: 11pt;
+  font-weight: 300; /* フォントウェイトを軽く */
+}
+
+h1 {
+  font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 1.5em;
+  page-break-after: avoid;
+  font-size: 20pt;
+  font-weight: 500; /* 見出しも少し軽く */
+}
+
+h2 {
+  font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+  color: #2c3e50;
+  border-bottom: 1px solid #bdc3c7;
+  padding-bottom: 5px;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  page-break-after: avoid;
+  font-size: 16pt;
+  font-weight: 600;
+}
+
+h3 {
+  font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+  color: #34495e;
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  page-break-after: avoid;
+  font-size: 14pt;
+  font-weight: 600;
+}
+
+ul,
+ol {
+  margin-left: 1.5em;
+  margin-bottom: 1.2em;
+  line-height: 1.9; /* リストの行間をさらに広く */
+}
+
+li {
+  margin-bottom: 0.6em; /* リスト項目間の間隔 */
+}
+
+p {
+  margin: 1em 0;
+  line-height: 1.8;
+}
+
+/* 強調部分のスタイル */
+strong,
+b {
+  font-weight: 700;
+}
+
+/* 表のスタイル */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  line-height: 1.6;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+/* 印刷用スタイル */
+@media print {
+  body {
+    margin: 0;
+    padding: 15mm;
+    font-size: 10pt;
+  }
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  ul,
+  ol,
+  p {
+    page-break-inside: avoid;
+  }
+
+  /* ページ区切りの調整 */
+  h2 {
+    page-break-before: auto;
+    margin-top: 1.5em;
+  }
+}

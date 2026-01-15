@@ -1,0 +1,6 @@
+export { default as PageHeader } from './PageHeader'
+export { default as TechOverview } from './TechOverview'
+export { default as TechFeatures } from './TechFeatures'
+export { default as TechStackDetails } from './TechStackDetails'
+export { default as DevProcess } from './DevProcess'
+export { default as ProjectDocuments } from './ProjectDocuments'

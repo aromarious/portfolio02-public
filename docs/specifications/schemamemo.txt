@@ -1,0 +1,68 @@
+1. personsテーブル（人テーブル）
+
+  // 基本情報
+  - id: UUID主キー
+  - name: 名前（必須）
+  - email: メールアドレス（必須、ユニーク）
+  - company: 会社名・組織名（オプション）
+
+  // メタデータ
+  - first_contact_at: 初回問い合わせ日時
+  - last_contact_at: 最終問い合わせ日時
+  - contact_count: 問い合わせ回数
+  - created_at: 作成日時
+  - updated_at: 更新日時
+
+2. contactsテーブル（問い合わせテーブル）
+
+  // 基本情報
+  - id: UUID主キー
+  - person_id: personsテーブルへの外部キー
+  - subject: 問い合わせ種別
+  - message: メッセージ内容
+  - preferred_contact_method: 希望連絡方法
+  - urgency_level: 緊急度（1-5）
+
+  // 技術情報（自動取得）
+  - ip_address: IPアドレス
+  - user_agent: User-Agent文字列
+  - browser_name: ブラウザ名
+  - browser_version: ブラウザバージョン
+  - os_name: OS名
+  - device_type:
+  デバイス種別（desktop/mobile/tablet）
+  - screen_resolution: 画面解像度
+  - timezone: タイムゾーン
+  - language: 言語設定
+  - referer: 流入元ページ
+
+  // セッション情報
+  - session_id: セッションID
+  - form_duration: フォーム滞在時間（秒）
+  - previous_visit_at: 前回訪問日時
+
+  // 外部連携フラグ
+  - notion_synced: Notion同期フラグ
+  - slack_notified: Slack通知フラグ
+  - notion_synced_at: Notion同期日時
+  - slack_notified_at: Slack通知日時
+
+  // 対応状況
+  - status:
+  対応ステータス（pending/in_progress/resolved）
+  - assigned_to: 担当者
+  - response_required: 返信要否
+  - responded_at: 返信日時
+
+  // タイムスタンプ
+  - created_at: 作成日時
+  - updated_at: 更新日時
+
+3. contact_responsesテーブル（返信テーブル）
+
+  - id: UUID主キー
+  - contact_id: contactsテーブルへの外部キー
+  - response_message: 返信内容
+  - response_method:
+  返信方法（email/phone/slack）
+  - created_at: 返信日時

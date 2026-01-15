@@ -1,0 +1,32 @@
+{
+  "name": "@aromarious/tailwind-config",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./native": "./native.ts",
+    "./web": "./web.ts"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome lint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "postcss": "^8.5.6",
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "@types/node": "^25.0.3",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

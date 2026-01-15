@@ -1,0 +1,68 @@
+name: ${APP_NAME:-portfolio02}
+
+services:
+  # 開発用データベース（PostgreSQL）
+  # Portfolio02アプリケーションの開発時データを格納
+  # デフォルト起動：profileなしで起動する
+  postgres:
+    image: postgres:16-alpine
+    profiles:
+      - dev # 開発環境でのみ起動
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      # PostgreSQL configuration
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --locale=C'
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      # Persistent data storage - externalized to host directory
+      - ./postgres_data:/var/lib/postgresql/data
+      # Initialization scripts
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - portfolio02-network
+
+  # 統合テスト用データベース（PostgreSQL）
+  # テスト実行時に使用する専用のPostgreSQLインスタンス
+  # 開発用DBとは独立したデータ領域を使用
+  postgres-test:
+    image: postgres:16-alpine
+    profiles:
+      - test # 統合テスト環境でのみ起動
+    restart: unless-stopped
+    environment:
+      # 統合テスト用の環境変数
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      # PostgreSQL configuration
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --locale=C'
+    ports:
+      # テスト用ポート（開発環境と重複しないよう設定）
+      - '${DB_PORT:-5433}:5432'
+    volumes:
+      # テスト専用データの永続化：開発環境とは別のボリュームを使用
+      - ./postgres_test_data:/var/lib/postgresql/data
+      # Initialization scripts
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - portfolio02-network
+
+networks:
+  portfolio02-network:
+    driver: bridge

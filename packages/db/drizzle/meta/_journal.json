@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1751186899605,
+      "tag": "0000_bumpy_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751190731644,
+      "tag": "0001_curvy_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751191394601,
+      "tag": "0002_chemical_sentinel",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751501458006,
+      "tag": "0003_white_pestilence",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1751858827238,
+      "tag": "0004_majestic_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1752884744802,
+      "tag": "0005_small_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768384921804,
+      "tag": "0006_modern_thanos",
+      "breakpoints": true
+    }
+  ]
+}

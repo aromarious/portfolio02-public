@@ -1,0 +1,85 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": [
+    "AUTH_SECRET",
+    "CRON_SECRET",
+    "KV_REST_API_TOKEN",
+    "KV_REST_API_URL",
+    "NOTION_API_TOKEN",
+    "NOTION_PARENT_PAGE_ID",
+    "PORT",
+    "POSTGRES_URL",
+    "SLACK_WEBHOOK_URL",
+    "NEXT_PUBLIC_SITE_URL"
+  ],
+  "globalPassThroughEnv": [
+    "CI",
+    "NODE_ENV",
+    "npm_lifecycle_event",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL"
+  ],
+  "tasks": {
+    "//#clean": {
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".cache/tsbuildinfo.json", "dist/**"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": ["^dev"]
+    },
+    "format": {
+      "outputLogs": "new-only",
+      "outputs": [".cache/.prettiercache"]
+    },
+    "lint": {
+      "dependsOn": ["^build", "^topo"]
+    },
+    "lint:fast": {
+      "dependsOn": []
+    },
+    "push": {
+      "cache": false,
+      "interactive": true
+    },
+    "studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:unit": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:integration": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build", "^topo"],
+      "outputs": [".cache/tsbuildinfo.json"]
+    },
+    "ui-add": {
+      "cache": false,
+      "interactive": true
+    }
+  },
+  "ui": "tui"
+}

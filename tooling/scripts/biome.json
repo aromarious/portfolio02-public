@@ -1,0 +1,6 @@
+{
+  "extends": ["../biome/biome.json"],
+  "formatter": {
+    "enabled": false
+  }
+}

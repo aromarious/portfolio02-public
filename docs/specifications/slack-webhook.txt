@@ -1,0 +1,30 @@
+curl -X POST -H 'Content-type: application/json' \
+  --data '{"text":"Portfolio02: Test notification from local development"}' \
+  $SLACK_WEBHOOK_URL
+
+curl -X POST -H 'Content-type: application/json' \
+  --data '{
+    "blocks": [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "*Portfolio02* デプロイ通知\n:white_check_mark: デプロイが完了しました"
+        }
+      },
+      {
+        "type": "section",
+        "fields": [
+          {
+            "type": "mrkdwn",
+            "text": "*環境:*\nProduction"
+          },
+          {
+            "type": "mrkdwn", 
+            "text": "*時刻:*\n$(date)"
+          }
+        ]
+      }
+    ]
+  }' \
+  $SLACK_WEBHOOK_URL

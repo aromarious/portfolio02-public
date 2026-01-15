@@ -1,0 +1,69 @@
+{
+  "name": "@aromarious/db",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./src/schema.ts"
+    },
+    "./test-client": {
+      "types": "./dist/test-client.d.ts",
+      "default": "./src/test-client.ts"
+    },
+    "./domain": {
+      "types": "./dist/domain/index.d.ts",
+      "default": "./src/domain/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "generate": "drizzle-kit generate",
+    "generate:preview": "VERCEL_ENV=preview drizzle-kit generate",
+    "lint": "biome lint .",
+    "lint:fast": "biome lint src",
+    "migrate": "tsx src/migrate.ts",
+    "migrate:drizzle": "drizzle-kit migrate",
+    "migrate:drizzle:preview": "VERCEL_ENV=preview drizzle-kit migrate",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "@aromarious/domain": "workspace:*",
+    "@aromarious/validators": "workspace:^",
+    "@vercel/postgres": "^0.10.0",
+    "drizzle-zod": "^0.8.3",
+    "postgres": "^3.4.7",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "@electric-sql/pglite": "^0.3.14",
+    "@vitest/coverage-v8": "catalog:",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-orm": "^0.45.1",
+    "prettier": "catalog:",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.21.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

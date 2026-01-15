@@ -1,0 +1,193 @@
+version: 2
+updates:
+  # Root package.json (workspace configuration)
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 5
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps(dev)'
+      include: 'scope'
+    # Group patch updates to reduce PR volume
+    groups:
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Next.js app package
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/apps/nextjs'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:30'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 3
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(nextjs)'
+      prefix-development: 'deps(dev,nextjs)'
+      include: 'scope'
+    groups:
+      minor-and-patch:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Tooling packages (ESLint, Prettier, etc.)
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/tooling'
+    schedule:
+      interval: 'weekly'
+      day: 'wednesday'
+      time: '09:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 3
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(tooling)'
+      prefix-development: 'deps(dev,tooling)'
+      include: 'scope'
+    groups:
+      tooling-updates:
+        patterns:
+          - '@eslint/*'
+          - 'eslint*'
+          - '@typescript-eslint/*'
+          - 'prettier*'
+          - '@prettier/*'
+          - 'turbo*'
+          - '@turbo/*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  # Individual package directories
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/api'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '10:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(api)'
+      prefix-development: 'deps(dev,api)'
+      include: 'scope'
+
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/auth'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '10:15'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(auth)'
+      prefix-development: 'deps(dev,auth)'
+      include: 'scope'
+
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/db'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '10:30'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(db)'
+      prefix-development: 'deps(dev,db)'
+      include: 'scope'
+
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/external'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '10:45'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(external)'
+      prefix-development: 'deps(dev,external)'
+      include: 'scope'
+
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/ui'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '11:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(ui)'
+      prefix-development: 'deps(dev,ui)'
+      include: 'scope'
+
+  - package-ecosystem: 'npm'
+    target-branch: 'dev'
+    directory: '/packages/validators'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '11:15'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 2
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'deps(validators)'
+      prefix-development: 'deps(dev,validators)'
+      include: 'scope'
+
+  # GitHub Actions workflow dependencies
+  - package-ecosystem: 'github-actions'
+    target-branch: 'dev'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '09:00'
+      timezone: 'Asia/Tokyo'
+    open-pull-requests-limit: 3
+    assignees:
+      - 'aromarious'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'

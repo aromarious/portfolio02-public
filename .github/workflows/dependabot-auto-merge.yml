@@ -1,0 +1,65 @@
+name: Dependabot auto-merge
+on: 
+  workflow_dispatch: {}
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  actions: read
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        
+      - name: Wait for CI to complete
+        uses: fountainhead/action-wait-for-check@v1.2.0
+        id: wait-for-ci
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: 'CI'
+          ref: ${{ github.event.pull_request.head.sha }}
+          timeoutSeconds: 600
+          
+      - name: Auto-merge development dependencies (patch/minor)
+        if: |
+          steps.wait-for-ci.outputs.conclusion == 'success' &&
+          (contains(github.event.pull_request.title, 'deps(dev)') || 
+           contains(github.event.pull_request.title, 'deps(dev,')) &&
+          !contains(github.event.pull_request.title, 'major')
+        run: |
+          gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Auto-merge production dependencies (patch/minor)
+        if: |
+          steps.wait-for-ci.outputs.conclusion == 'success' &&
+          (contains(github.event.pull_request.title, 'deps(ui)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(auth)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(api)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(db)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(external)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(validators)(deps)') ||
+           contains(github.event.pull_request.title, 'deps(nextjs)(deps)')) &&
+          !contains(github.event.pull_request.title, 'major')
+        run: |
+          gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Auto-merge GitHub Actions (patch/minor)
+        if: |
+          steps.wait-for-ci.outputs.conclusion == 'success' &&
+          contains(github.event.pull_request.title, 'ci') &&
+          !contains(github.event.pull_request.title, 'major')
+        run: |
+          gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

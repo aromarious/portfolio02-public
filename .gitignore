@@ -1,0 +1,93 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage*
+reports/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# nitro
+.nitro/
+.output/
+
+# expo
+.expo/
+expo-env.d.ts
+apps/expo/.gitignore
+apps/expo/ios
+apps/expo/android
+
+# production
+build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+dist/
+.cache
+
+# turbo
+.turbo
+
+# E2E test config (local settings)
+e2e.config.local.json
+
+# docker postgres data
+tooling/docker/postgres_data/
+tooling/docker/postgres_test_data/
+
+portfolio02_original
+docs/20250621-portfolio-data.md
+docs/20250621-resume.md
+tooling/docker/postgres_data
+tooling/docker/postgres_test_data
+apps/nextjs/src/app/\(test\)
+.env*
+!.envrc*
+*.drawio.bkp
+CLAUDE.local.md
+CLAUDE.local.md
+.vscode/settings.json
+*.log
+
+# tech stack analysis backups
+docs/tech-stack-analysis/backups/
+.VSCodeCounter
+
+# supabase backups (sensitive data)
+backups/
+
+# LaTeX files
+*.log
+*.aux
+*.dvi
+*.xbb
+.trash
+
+# Private resume files (real name versions)
+docs/resume/*-private.*
+.upstream-version
+scripts/sync-upstream.sh

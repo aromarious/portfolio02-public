@@ -1,0 +1,1 @@
+ALTER TABLE "rate_limit" ADD COLUMN "test_column" varchar(100);

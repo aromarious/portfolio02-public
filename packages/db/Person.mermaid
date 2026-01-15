@@ -1,0 +1,50 @@
+graph TB
+    %% ドメイン層
+    subgraph "ドメイン層 (Domain Layer)"
+        PE[Person Entity<br/>集約ルート]
+        EVO[Email Value Object<br/>メールアドレス]
+        
+        %% ドメインイベント
+        PCE[PersonCreatedEvent<br/>作成イベント]
+        PCTE[PersonContactedEvent<br/>連絡イベント]
+        
+        %% DDD基底クラス
+        AR[AggregateRoot<br/>集約ルートベース]
+        VO[ValueObject<br/>値オブジェクトベース]
+        DE[DomainEvent<br/>ドメインイベント]
+    end
+    
+    %% ポート層（インターフェース）
+    subgraph "ポート層 (Ports)"
+        PRP[PersonRepositoryPort<br/>リポジトリインターフェース]
+        PF[PersonFilter<br/>フィルター定義]
+        PO[PaginationOptions<br/>ページネーション定義]
+    end
+    
+    %% アダプター層（実装）
+    subgraph "アダプター層 (Adapters)"
+        PR[PersonRepository<br/>リポジトリ実装]
+        DB[Database Client<br/>Drizzle ORM]
+        PS[PersonTable<br/>データベーススキーマ]
+    end
+    
+    %% 関連線
+    PE --> |継承| AR
+    EVO --> |継承| VO
+    PCE --> |実装| DE
+    PCTE --> |実装| DE
+    
+    PE --> |持つ| EVO
+    PE --> |発行| PCE
+    PE --> |発行| PCTE
+    
+    PR --> |実装| PRP
+    PR --> |使用| PE
+    PR --> |使用| EVO
+    PR --> |アクセス| DB
+    DB --> |操作| PS
+    
+    PRP --> |参照| PE
+    PRP --> |参照| EVO
+    PRP --> |使用| PF
+    PRP --> |使用| PO

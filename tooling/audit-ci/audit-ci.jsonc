@@ -1,0 +1,28 @@
+{
+  "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+  // 脆弱性レベル設定（Critical/Highのみでビルド失敗）
+  "moderate": false,
+  "high": true,
+  "critical": true,
+  // パッケージマネージャー指定
+  "package-manager": "pnpm",
+  // レポート形式（CI環境ではsummaryが最適）
+  "report-type": "summary",
+  // 許可リスト（既知の低リスク脆弱性・開発環境限定など）
+  "allowlist": [
+    // esbuild CORS脆弱性 - 開発環境のみの影響
+    // GHSA-67mh-4wv8-2f99: esbuildの開発サーバーCORS設定問題
+    // 本番環境では使用しないため許可
+    "GHSA-67mh-4wv8-2f99",
+    // better-call Cache Deception - CDN使用していないため低リスク
+    // GHSA-hq75-xg7r-rx6c: CDNキャッシュ関連の脆弱性
+    // 本プロジェクトではCDNキャッシュを使用していないため許可
+    "GHSA-hq75-xg7r-rx6c"
+  ],
+  // 出力設定
+  "output-format": "text",
+  // 監査対象の制限（本番依存関係のみ）
+  // EXITコード設定（デフォルト）
+  "pass-enoaudit": false,
+  // 詳細設定
+}

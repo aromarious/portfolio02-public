@@ -1,0 +1,20 @@
+docs/resume/README.md
+CLAUDE.md
+CLAUDE.local.md
+.github
+# 英語ファイルを除外
+*.en.md
+docs/en/**/*.md
+
+# node_modules など
+node_modules/
+dist/
+build/
+.next/
+
+# その他除外したいファイル
+*.log
+*.lock
+
+# journalはかまわない
+docs/journals/**/*.md

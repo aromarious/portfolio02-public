@@ -1,0 +1,33 @@
+{
+  "name": "@aromarious/commitlint-config",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome lint .",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "commitlint-config-gitmoji": "^2.3.1",
+    "conventional-changelog-gitmoji-config": "^1.5.2"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

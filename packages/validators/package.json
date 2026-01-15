@@ -1,0 +1,42 @@
+{
+  "name": "@aromarious/validators",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./contact": "./src/contact.field.schema.ts",
+    "./contactResponse": "./src/contactResponse.field.schema.ts",
+    "./person": "./src/person.field.schema.ts",
+    "./rateLimit": "./src/rateLimit.field.schema.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome lint .",
+    "lint:fast": "biome lint src",
+    "test": "vitest --config ../../tooling/vitest/vitest.workspace.ts",
+    "test:coverage": "vitest --config ../../tooling/vitest/vitest.workspace.ts --coverage",
+    "test:integration": "vitest --config ../../tooling/vitest/vitest.workspace.ts --project integration",
+    "test:unit": "vitest --config ../../tooling/vitest/vitest.workspace.ts --project unit",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "@aromarious/domain": "workspace:^",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

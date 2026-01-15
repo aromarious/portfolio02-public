@@ -1,0 +1,6 @@
+# Browserslist config for iOS Safari 13.4未満対応
+> 0.5%
+last 2 versions
+not dead
+ios_saf >= 13.0
+safari >= 13.0

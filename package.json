@@ -1,0 +1,123 @@
+{
+  "name": "portfolio02-public",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo run clean",
+    "db:generate": "pnpm -F @aromarious/db generate",
+    "db:migrate": "pnpm -F @aromarious/db migrate",
+    "db:push": "pnpm -F @aromarious/db push",
+    "db:studio": "turbo -F @aromarious/db studio",
+    "dev": "turbo dev --continue --no-daemon",
+    "dev:next": "turbo watch dev -- --no-daemon -F @aromarious/nextjs...",
+    "dev:test": "cd apps/nextjs && POSTGRES_URL=postgresql://postgres:password@localhost:5433/postgres next dev --port 3201",
+    "docker:dev:down": "docker-compose -f tooling/docker/docker-compose.yml --profile dev down",
+    "docker:dev:up": "docker-compose -f tooling/docker/docker-compose.yml --profile dev up -d",
+    "docker:down": "docker-compose -f tooling/docker/docker-compose.yml --profile '*' down",
+    "docker:logs": "docker-compose -f tooling/docker/docker-compose.yml --profile '*' logs",
+    "docker:test:down": "docker-compose -f tooling/docker/docker-compose.yml --profile test down",
+    "docker:test:stop": "docker-compose -f tooling/docker/docker-compose.yml --profile test stop",
+    "docker:test:up": "docker-compose -f tooling/docker/docker-compose.yml --profile test up -d",
+    "docker:up": "docker-compose -f tooling/docker/docker-compose.yml --profile '*' up -d",
+    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "postinstall": "pnpm lint:ws",
+    "lint": "turbo run lint --continue",
+    "lint:fast": "turbo run lint:fast",
+    "lint:fast:fix": "turbo run lint:fast -- --write",
+    "lint:fix": "turbo run lint --continue -- --write",
+    "lint:ws": "pnpm dlx sherif@latest",
+    "prepare": "husky",
+    "resume:private": "./scripts/resume-private.sh && cd docs/resume && /usr/local/texlive/2025basic/bin/universal-darwin/platex resume01-personal-info-private.tex && /usr/local/texlive/2025basic/bin/universal-darwin/dvipdfmx resume01-personal-info-private.dvi && rm -f *.aux *.dvi *.log missfont.log",
+    "resume:public": "./scripts/resume-public.sh",
+    "seed:dev": "vitest --run --config tooling/vitest/vitest.seed.config.ts --testNamePattern=\"Development Seed\" --reporter=verbose",
+    "seed:large": "vitest --run --config tooling/vitest/vitest.seed.config.ts --testNamePattern=\"Large Dataset\" --reporter=verbose",
+    "seed:resync": "vitest --run --config tooling/vitest/vitest.seed.config.ts --testNamePattern=\"Resync Unsynced\" --reporter=verbose",
+    "test": "vitest --run --config tooling/vitest/vitest.config.ts --project \"📦unit\" --project \"🔁database\" --project \"🌐external\"",
+    "test:coverage": "vitest --run --config tooling/vitest/vitest.config.ts --project \"📦unit\" --project \"🔁database\" --project \"🌐external\" --coverage",
+    "test:coverage:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"📦unit\" --project \"🔁database\" --project \"🌐external\" --coverage",
+    "test:database": "vitest --run --config tooling/vitest/vitest.config.ts --project \"🔁database\"",
+    "test:database:cleanup": "pnpm docker:test:down",
+    "test:database:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"🔁database\"",
+    "test:e2e": "vitest --run --config tooling/vitest/vitest.config.ts --project \"🎭e2e\"",
+    "test:e2e:cleanup": "pnpm docker:test:down",
+    "test:e2e:setup": "pnpm docker:test:up && echo 'テストDBが起動しました。別ターミナルで pnpm dev:test を実行してください。'",
+    "test:e2e:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"🎭e2e\"",
+    "test:external": "vitest --run --config tooling/vitest/vitest.config.ts --project \"🌐external\"",
+    "test:external:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"🌐external\"",
+    "test:unit": "vitest --run --config tooling/vitest/vitest.config.ts --project \"📦unit\"",
+    "test:unit:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"📦unit\"",
+    "test:watch": "vitest --config tooling/vitest/vitest.config.ts --project \"📦unit\" --project \"🔁database\" --project \"🌐external\"",
+    "textlint": "textlint --config ./tooling/textlint-config/index.js",
+    "textlint:mcp": "textlint --mcp --config ./tooling/textlint-config/index.js",
+    "typecheck": "turbo run typecheck",
+    "ui-add": "turbo run ui-add"
+  },
+  "commitlint": {
+    "extends": [
+      "@aromarious/commitlint-config"
+    ]
+  },
+  "lint-staged": {
+    "**/package.json": [
+      "sort-package-json"
+    ],
+    "{apps,packages}/**/*.{json,yml,yaml}": [
+      "pnpm format:fix"
+    ],
+    "{apps,packages}/*/src/**/*.{js,jsx,ts,tsx}": [
+      "pnpm format:fix",
+      "pnpm lint:fast:fix"
+    ],
+    "{apps,packages}/*/src/**/*.{ts,tsx}": [
+      "echo '\n⚠️  TypeScript files detected in staged changes.\n💡 Please run type checking manually if needed: pnpm typecheck\n'"
+    ],
+    "{docs,apps,packages}/**/*.{md,json}": [
+      "pnpm format:fix"
+    ]
+  },
+  "prettier": "@aromarious/prettier-config",
+  "devDependencies": {
+    "@aromarious/commitlint-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@mermaid-js/mermaid-zenuml": "^0.2.2",
+    "@ngneat/falso": "^8.0.2",
+    "@playwright/test": "^1.57.0",
+    "@textlint-ja/textlint-rule-preset-ai-writing": "^1.6.1",
+    "@turbo/gen": "^2.6.3",
+    "@vitest/coverage-v8": "catalog:",
+    "@ysk8hori/typescript-graph": "^0.26.5",
+    "cyclomatic-complexity": "^1.2.5",
+    "hono": "^4.11.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "playwright": "^1.57.0",
+    "prettier": "catalog:",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sort-package-json": "^3.6.0",
+    "textlint": "^15.5.0",
+    "textlint-filter-rule-allowlist": "^4.0.0",
+    "textlint-filter-rule-node-types": "^1.1.0",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "textlint-rule-prh": "^6.1.0",
+    "turbo": "^2.6.3",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "packageManager": "pnpm@10.11.1",
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": ">=9.6.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@modelcontextprotocol/sdk": "^1.25.2",
+      "esbuild": "^0.25.0",
+      "hono": "^4.11.4",
+      "qs": "^6.14.1",
+      "tmp": "^0.2.4"
+    }
+  }
+}

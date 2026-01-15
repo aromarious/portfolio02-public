@@ -1,0 +1,6 @@
+{
+  "extends": ["../biome/src/base.json"],
+  "files": {
+    "ignore": ["node_modules/**", ".turbo/**", "dist/**", "**/__tests__/**"]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@aromarious/textlint-config",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome lint ."
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "textlint-rule-preset-ja-spacing": "^2.4.3",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "textlint-rule-preset-japanese": "^10.0.4",
+    "textlint-rule-prh": "^6.1.0",
+    "textlint-rule-terminology": "^5.2.16"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "prettier": "catalog:"
+  }
+}

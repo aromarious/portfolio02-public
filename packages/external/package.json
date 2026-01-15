@@ -1,0 +1,39 @@
+{
+  "name": "@aromarious/external",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "biome lint .",
+    "lint:fast": "biome lint src",
+    "notion:update-schema": "tsx scripts/update-notion-schema.ts",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "@aromarious/domain": "workspace:*",
+    "@notionhq/client": "^5.6.0",
+    "@slack/webhook": "^7.0.6",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "^4.21.0",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "enableRealApiTests": true,
+  "notion": {
+    "apiToken": "secret_your_notion_test_api_token",
+    "parentPageId": "your_notion_parent_page_id"
+  },
+  "slack": {
+    "webhookUrl": "https://hooks.slack.com/services/YOUR/TEST/WEBHOOK"
+  }
+}

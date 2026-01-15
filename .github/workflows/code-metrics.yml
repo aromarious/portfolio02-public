@@ -1,0 +1,113 @@
+name: Code Metrics Report
+
+on:
+  schedule:
+    # 毎週月曜日の朝9時（JST）に実行
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Install analysis tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cloc jq
+          
+      - name: Generate metrics report
+        run: |
+          # 一時ファイルを使用
+          REPORT_FILE="/tmp/metrics_report.md"
+          
+          # レポートヘッダー作成
+          {
+            echo "## 📊 Code Metrics Report"
+            echo ""
+            echo "### 行数の多いファイル TOP10"
+            echo "| Lines | File |"
+            echo "|-------|------|"
+          } > "$REPORT_FILE"
+          
+          # cloc実行とメトリクス生成
+          cloc apps packages --by-file-by-lang --include-lang=TypeScript,TSX,JavaScript --exclude-dir=node_modules,dist,build,.next,coverage --quiet --csv 2>/dev/null | \
+            tail -n +2 | \
+            grep -E "\.(ts|tsx|js|jsx)," | \
+            awk -F',' '{print $5 " " $2}' | \
+            sort -nr | \
+            head -10 | \
+            while IFS=' ' read -r lines file; do
+              if [ -n "$lines" ] && [ "$lines" -gt 0 ] 2>/dev/null; then
+                if [ "$lines" -gt 500 ]; then
+                  echo "| 💥 **$lines** | $file |" >> "$REPORT_FILE"
+                elif [ "$lines" -gt 300 ]; then
+                  echo "| ⚠️ $lines | $file |" >> "$REPORT_FILE"
+                else
+                  echo "| ✓ $lines | $file |" >> "$REPORT_FILE"
+                fi
+              fi
+            done || echo "| - | データが見つかりません |" >> "$REPORT_FILE"
+          
+          # 複雑度メトリクス追加
+          {
+            echo ""
+            echo "### 複雑度の高いファイル TOP10"
+            echo "| Complexity | File |"
+            echo "|------------|------|"
+          } >> "$REPORT_FILE"
+          
+          # cyclomatic-complexity実行
+          npx cyclomatic-complexity 'apps/**/*.{ts,tsx}' 'packages/**/*.{ts,tsx}' --json 2>/dev/null | \
+            jq -r '.[] | select(.complexitySum > 0) | "\(.complexitySum) \(.file)"' | \
+            sort -nr | \
+            head -10 | \
+            while IFS=' ' read -r complexity file; do
+              if [ -n "$complexity" ] && [ "$complexity" -gt 0 ] 2>/dev/null; then
+                if [ "$complexity" -gt 20 ]; then
+                  echo "| 💥 **$complexity** | $file |" >> "$REPORT_FILE"
+                elif [ "$complexity" -gt 10 ]; then
+                  echo "| ⚠️ $complexity | $file |" >> "$REPORT_FILE"
+                else
+                  echo "| ✓ $complexity | $file |" >> "$REPORT_FILE"
+                fi
+              fi
+            done || echo "| - | データが見つかりません |" >> "$REPORT_FILE"
+          
+          # フッター追加
+          {
+            echo ""
+            echo "### 基準値"
+            echo "- 💥 要リファクタリング (>500行 or >20複雑度)"
+            echo "- ⚠️ 注意が必要 (>300行 or >10複雑度)"
+            echo "- ✓ 良好 (≤300行 and ≤10複雑度)"
+          } >> "$REPORT_FILE"
+          
+          # GITHUB_STEP_SUMMARYとGITHUB_ENVに出力
+          if [ -f "$REPORT_FILE" ]; then
+            cat "$REPORT_FILE" >> "$GITHUB_STEP_SUMMARY" || true
+            
+            # 環境変数に保存
+            echo "METRICS_REPORT<<EOF" >> $GITHUB_ENV
+            cat "$REPORT_FILE" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
+          

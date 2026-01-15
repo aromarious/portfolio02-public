@@ -1,0 +1,1 @@
+ALTER TABLE "rate_limit" DROP COLUMN "test_column";

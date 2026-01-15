@@ -1,0 +1,10 @@
+{
+  "extends": "@aromarious/tsconfig/base.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,58 @@
+{
+  "name": "@aromarious/edge-security",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "default": "./src/core.ts"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./src/types.ts"
+    },
+    "./rules": {
+      "types": "./dist/rules/index.d.ts",
+      "default": "./src/rules/index.ts"
+    },
+    "./redis": {
+      "types": "./dist/redis-adapter.d.ts",
+      "default": "./src/redis-adapter.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format:fix": "prettier --write . --ignore-path ../../.gitignore",
+    "lint": "biome lint .",
+    "lint:fast": "biome lint src",
+    "lint:fix": "biome lint --apply .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "prettier": "@aromarious/prettier-config",
+  "dependencies": {
+    "@upstash/redis": "^1.35.8",
+    "@vercel/functions": "^3.3.4",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aromarious/biome-config": "workspace:*",
+    "@aromarious/prettier-config": "workspace:*",
+    "@aromarious/tsconfig": "workspace:*",
+    "@biomejs/biome": "catalog:",
+    "@types/node": "^25.0.3",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

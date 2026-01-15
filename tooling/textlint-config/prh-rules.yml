@@ -1,0 +1,27 @@
+version: 1
+rules:
+  # 日本語文脈でのai => AI変換（英単語内のaiを除外）
+  - expected: AI
+    patterns:
+      # 英字に囲まれていないaiのみを対象
+      - /(?<![a-zA-Z])ai(?![a-zA-Z])/
+
+  - expected: TypeScript
+    patterns:
+      - typescript
+      - Typescript
+
+  - expected: JavaScript
+    patterns:
+      - javascript
+      - Javascript
+
+  - expected: DuckDB
+    patterns:
+      - duckdb
+      - Duck DB
+
+  - expected: SQL
+    patterns:
+      - sql
+      - Sql

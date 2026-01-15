@@ -1,0 +1,16 @@
+{
+  "name": "@aromarious/audit-ci-config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Security audit configuration for CI/CD pipelines using audit-ci",
+  "keywords": [
+    "audit-ci",
+    "security",
+    "ci",
+    "pnpm"
+  ],
+  "scripts": {
+    "audit": "npx audit-ci@^7 --config ./audit-ci.jsonc",
+    "audit:strict": "npx audit-ci@^7 --config ./audit-ci.jsonc --moderate"
+  }
+}
